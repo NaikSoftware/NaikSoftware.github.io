@@ -1,0 +1,36 @@
+<html>
+  <title>Test syntax highliter</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <head>
+	<!--link href="rainbow/themes/blackboard.css" rel="stylesheet" type="text/css"-->
+	<link href="rainbow/themes/all-hallows-eve.css" rel="stylesheet" type="text/css">
+<style>
+  body {
+	  background-color: grey;
+  }
+</style>
+  </head>
+  <body>
+
+	<script type="text/javascript" src="rainbow/rainbow.min.js"></script>
+	<script type="text/javascript" src="rainbow/language/generic.js"></script>
+	<script type="text/javascript" src="rainbow/language/php.js"></script>
+
+	<code><pre contenteditable style="margin:10px" id="out"></pre></code>
+
+<script type="text/javascript">// <![CDATA[
+
+window.onload = function() {
+    var out = document.getElementById('out');
+    var func = function() {
+		Rainbow.color(out.innerText, 'php', function(highlighted_code) {
+						  out.innerHTML = highlighted_code;
+					  });
+    };
+    out.onkeyup = func;
+};
+// ]]>
+</script>
+
+  </body>
+</html>
