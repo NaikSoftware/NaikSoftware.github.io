@@ -20,11 +20,11 @@ $(function () {
     });
     
     $("#btn_ddnf").click(function () {
-        calcDdnf($("#latexMode").get(0).checked);
+        calcFull("ddnf", $("#latexMode").get(0).checked);
     });
     
-    $("#btn_ddnf").click(function () {
-        calcDknf($("#latexMode").get(0).checked);
+    $("#btn_dknf").click(function () {
+        calcFull("dknf", $("#latexMode").get(0).checked);
     });
 });
 
@@ -80,30 +80,40 @@ function getTableContent() {
     return {tbl: result, fnc: func};
 }
 
-function calcDdnf(latexMode) {
+function calcFull(modeName, latex) {
+	var mode = '0';
+	if (modeName === 'ddnf') mode = '1';
     var data = getTableContent();
-    var text = $("#result_text").empty();
-	text.append("ДДНФ(F<sub>1</sub>) = ");
+    var text = $('#result_text').empty();
+	text.append((mode === '1' ? 'ДДНФ' : 'ДКНФ') + '(F<sub>1</sub>) = ');
 	var rows = data.fnc.length;
 	var implicants = 0;
 	for (var i = 0;i < rows;i++) {
-		if (data.fnc[i] === "1") {
-			var impl = (implicants? ' + ' : '') + '<i>';
-			implicants++;
+		if (data.fnc[i] === mode) {
+			var impl = '';
+			if (mode === '1') {
+				if (implicants++ > 0? ' + ' : '') {
+				    impl += '+';
+				}
+			} else {
+				implicants = 0;
+				impl += '(';
+			}
+			impl += '<i>';
 			for (var j = 0;j < varNum;j++) {
-				if (data.tbl[i][j] === "1") {
+				if (mode === '0' && implicants++ > 0) {
+					impl += '+';
+				}
+				if (data.tbl[i][j] === mode) {
 					impl += ('x<sub>' + (j + 1) + '</sub>');
 				} else {
-					impl += ('<span class="overline">x<sub>' + (j + 1) + '</sub></span>');
+					impl += ('<span class="overline">x</span><sub>' + (j + 1) + '</sub>');
 				}
 			}
-			impl += "</i>";
+			impl += '</i>';
+			if (mode === '0') impl += ')';
 			text.append(impl);
 		}
 	}
-}
-
-function calcDknf(latexMode) {
-    
 }
 

@@ -1,5 +1,3 @@
 .overline {
-     border-top: solid 1px black;
-	 margin-left: 1px;
-	 margin-right: 1px;
+     text-decoration: overline;
 }
