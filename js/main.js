@@ -73,10 +73,10 @@ $(function () {
         labelVarNums.text(varNum);
         labelFuncNums.text(funcNum);
         var head = $("#truth_table_head").empty();
-        for (var i = 1; i <= varNum; i++) {
+        for (var i = 0; i < varNum; i++) {
             head.append('<td><div class="text-center text-primary">X<sub>' + i + '</sub></div></td>');
         }
-        for (i = 1; i <= funcNum; i++) {
+        for (i = 0; i < funcNum; i++) {
             head.append('<td class="col-lg-2"><div class="text-center text-warning">F<sub>' + i + '</sub></div></td>');
         }
 
@@ -126,7 +126,7 @@ $(function () {
             mode = 1;
         var data = getTableContent();
         resultText.empty();
-        resultText.append((mode === 1 ? 'ДДНФ' : 'ДКНФ') + '(F<sub>1</sub>) = ');
+        resultText.append((mode === 1 ? 'ДДНФ' : 'ДКНФ') + '(F<sub>0</sub>) = ');
         var vars = data.varTable;
         var funcs = data.funcTable;
         var rows = vars.length;
@@ -148,9 +148,9 @@ $(function () {
                         impl += '+';
                     }
                     if (vars[i][j] === mode) {
-                        impl += ('x<sub>' + (j + 1) + '</sub>');
+                        impl += ('x<sub>' + j + '</sub>');
                     } else {
-                        impl += ('<span class="overline">x</span><sub>' + (j + 1) + '</sub>');
+                        impl += ('<span class="overline">x</span><sub>' + j + '</sub>');
                     }
                 }
                 impl += '</i>';
