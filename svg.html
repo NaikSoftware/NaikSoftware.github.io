@@ -1,40 +1,41 @@
+<!DOCTYPE html>
 <html>
-  <head>
-	<title>SvgPathTester</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-	<link href="css/main.css" rel="stylesheet" media="screen">
-	<script src="js/jquery/jquery.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/svg.js"></script>
-  </head>
-  <body class="container" style="background-color: #c8e5bc">
-	<div class="navbar">
-	  <div class="container-fluid">
-		<h2 class="page-header">SVG Path Tester</h2>
-	  </div>
-	</div>
+    <head>
+        <title>SvgPathTester</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="css/main.css" rel="stylesheet" media="screen">
+        <script src="js/jquery/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/svg.js"></script>
+    </head>
+    <body class="container" style="background-color: #c8e5bc">
+        <div class="navbar">
+            <div class="container-fluid">
+                <h2 class="page-header">SVG Path Tester</h2>
+            </div>
+        </div>
 
-	<div class="panel panel-default">
-	  <div class="panel-heading"><h4 class="text-center"><span class="glyphicon glyphicon-th-large"></span> Result</h4></div>
-	  <div class="panel-body" style="text-align: center: min-height: 200px;">
-		<svg xmlns="http://www.w3.org/2000/svg">
-		  <path id="svg_path" d=""></path>
-		</svg>
-	  </div>
-	</div>
-	<div class="panel panel-success col-lg-12">
-	  <div class="panel-body">
-		  <textarea id="input_text" class="col-lg-8 container-fluid" style="min-height: 100px; width: 100%; font-size: 20px;">M 0 0 A 10 10 0 0,1 0 100</textarea>
-		  <div class="col-lg-offset-4 pull-right" style="margin: 10px; margin-bottom: 20px;">
-			<a id="btn_process" class="btn btn-default"><span class="glyphicon glyphicon-refresh pull-left" style="margin-right: 7px; margin-top: 3px;"></span>Process</a>
-		  </div>
-	  </div>
-	</div>
-	<div class="bottom text-center text-info" style="margin-bottom: 10px">
-	  <span class="glyphicon glyphicon-copyright-mark"></span>
-	  <span class="text-info">NaikSoftware</span>
-	</div>
-  </body>
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4 class="text-center"><span class="glyphicon glyphicon-th-large"></span> Result</h4></div>
+            <div class="panel-body" style="text-align: center; min-height: 200px;">
+                <svg xmlns="http://www.w3.org/2000/svg">
+                <path id="svg_path" d=""></path>
+                </svg>
+            </div>
+        </div>
+        <div class="panel panel-success col-lg-12">
+            <div class="panel-body">
+                <textarea id="input_text" class="col-lg-8 container-fluid" style="min-height: 100px; width: 100%; font-size: 20px;">M 0 0 A 10 10 0 0,1 0 100</textarea>
+                <div class="col-lg-offset-4 pull-right" style="margin: 10px; margin-bottom: 20px;">
+                    <a id="btn_process" class="btn btn-default"><span class="glyphicon glyphicon-refresh pull-left" style="margin-right: 7px; margin-top: 3px;"></span>Process</a>
+                </div>
+            </div>
+        </div>
+        <div class="bottom text-center text-info" style="margin-bottom: 10px">
+            <span class="glyphicon glyphicon-copyright-mark"></span>
+            <span class="text-info">NaikSoftware</span>
+        </div>
+    </body>
 </html>
