@@ -4,67 +4,78 @@ QuineCalc project
 @author Naik
 -->
 <html>
-    <head>
-        <title>QuineCalc</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-        <link href="css/main.css" rel="stylesheet" media="screen">
-        <script src="js/jquery/jquery.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/main.js"></script>
-    </head>
-    <body class="container" style="background-color: #c8e5bc">
-        <div class="navbar">
-            <div class="container-fluid">
-                <h2 class="page-header">QuineCalc Online</h2>
-            </div>
-        </div>
+  <head>
+	<title>QuineCalc</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="css/main.css" rel="stylesheet" media="screen">
+	<script src="js/jquery/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/main.js"></script>
+  </head>
+  <body class="container" style="background-color: #c8e5bc">
+	<div class="navbar">
+	  <div class="container-fluid">
+		<h2 class="page-header">QuineCalc Online</h2>
+	  </div>
+	</div>
 
-        <div class="panel panel-default">
-            <div class="panel-heading"><h4 class="text-center"><span class="glyphicon glyphicon-th-large"></span> Таблиця істинності</h4></div>
-            <div class="panel-body" style="text-align: center">
+	<div class="panel panel-default">
+	  <div class="panel-heading"><h4 class="text-center"><span class="glyphicon glyphicon-th-large"></span> Таблиця істинності</h4></div>
+	  <div class="panel-body" style="text-align: center;">
 
-                <div class="btn-group" style="margin-bottom: 1em">
-                    <a id="btn_minus" class="btn btn-info"><span class="glyphicon glyphicon-minus"></span></a>
-                    <span id="label_num" class="btn disabled"></span>
-                    <a id="btn_plus" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span></a>
-                </div>
-                <div class="panel panel-default">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr id="truth_table_head" class="bg-success">
-                            </tr>
-                        </thead>
-                        <tbody id="truth_table_body">
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="panel panel-success col-lg-12">
-            <div class="panel-body">
-                <div class="btn-group-vertical">
-                    <a id="btn_ddnf" class="btn btn-default"><span class="glyphicon glyphicon-pushpin pull-left"></span>ДДНФ</a>
-                    <a id="btn_dknf" class="btn btn-default"><span class="glyphicon glyphicon-pushpin pull-left"></span>ДКНФ</a>
-                    <a id="btn_quine_mac_klask" class="btn btn-default"><span class="glyphicon glyphicon-pushpin pull-left"></span>Метод Куайна - Мак Класка </a>
-                    <hr>
-                    <div class="input-group" style="margin-bottom: 10px">
-                        <span class="input-group-addon">Використовувати LaTeX формат</span>
-                        <span class="input-group-addon">
-                            <input type="checkbox" id="latexMode"/>
-                        </span>
-                    </div>
-                </div>
-                <div class="panel panel-default col-lg-offset-4">
-                    <div id="result_text" style="min-height: 100px; font-size: 20px; padding: 7px;">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="bottom text-center text-info" style="margin-bottom: 10px">
-            <span class="glyphicon glyphicon-copyright-mark"></span>
-            <span class="text-info">NaikSoftware</span>
-        </div>
-    </body>
+		<div class="btn-group-xs" style="margin-bottom: 1em;">
+		  <!-- Variables counter -->
+		  <span class="text-success" style="margin-right: 1em;">
+			V:
+			<a id="btn_minus" class="btn btn-success"><span class="glyphicon glyphicon-minus"></span></a>
+			<span id="label_num" class="btn disabled"></span>
+			<a id="btn_plus" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></a>
+		  </span>
+		  <!-- Functions counter -->
+		  <span class="text-info">
+			F:
+			<a id="btn_minus_f" class="btn btn-info"><span class="glyphicon glyphicon-minus"></span></a>
+			<span id="label_num_f" class="btn disabled"></span>
+			<a id="btn_plus_f" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span></a>
+		  </span>
+		</div>
+		<div class="panel panel-default">
+		  <table class="table table-bordered">
+			<thead>
+			  <tr id="truth_table_head" class="bg-success">
+			  </tr>
+			</thead>
+			<tbody id="truth_table_body">
+			</tbody>
+		  </table>
+		</div>
+	  </div>
+	</div>
+	<div class="panel panel-success col-lg-12">
+	  <div class="panel-body">
+		<div class="btn-group-vertical">
+		  <a id="btn_ddnf" class="btn btn-default"><span class="glyphicon glyphicon-pushpin pull-left"></span>ДДНФ</a>
+		  <a id="btn_dknf" class="btn btn-default"><span class="glyphicon glyphicon-pushpin pull-left"></span>ДКНФ</a>
+		  <a id="btn_quine_mac_klask" class="btn btn-default"><span class="glyphicon glyphicon-pushpin pull-left"></span>Метод Куайна - Мак Класка </a>
+		  <hr>
+		  <div class="input-group" style="margin-bottom: 10px">
+			<span class="input-group-addon">Використовувати LaTeX формат</span>
+			<span class="input-group-addon">
+			  <input type="checkbox" id="latexMode"/>
+			</span>
+		  </div>
+		</div>
+		<div class="panel panel-default col-lg-offset-4">
+		  <div id="result_text" style="min-height: 100px; font-size: 20px; padding: 7px;">
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<div class="bottom text-center text-info" style="margin-bottom: 10px">
+	  <span class="glyphicon glyphicon-copyright-mark"></span>
+	  <span class="text-info">NaikSoftware</span>
+	</div>
+  </body>
 </html>
