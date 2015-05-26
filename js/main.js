@@ -428,7 +428,7 @@ $(function () {
         var skImpl;
         for (var i = 0; i < skdnf.length; i++) {
             skImpl = skdnf[i];
-            row = $('<tr>').append($('<td>').append(skImpl.vars
+            row = $('<tr>').append($('<td nowrap>').append(skImpl.vars
                     + '<span class="pull-right">(' + getHumanReadableLabels(skImpl) + ')</span>'));
             for (var j = 0; j < ddnf.length; j++) { // Номер функции
                 for (var k = 0; k < ddnf[j].length; k++) {// Номер импликанты
@@ -443,6 +443,7 @@ $(function () {
             table.append(row);
         }
         resultText.append(table);
+        resultText.append('<a class="btn btn-default"><span class="glyphicon glyphicon-resize-full"></span></a><br/>');
     }
 
     // Impl b must be without '_'
