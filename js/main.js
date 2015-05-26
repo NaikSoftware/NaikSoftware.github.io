@@ -266,7 +266,7 @@ $(function () {
         for (var i = 0; i < groups.length; i++) {
             var group = groups[i];
             for (var j = 0; j < group.length; j++) {
-                content += '<tr colspan="' + group.length + '"><td>' + i + '</td>'
+                content += '<tr><td>' + i + '</td>'
                         + '<td>' + group[j].vars + '</td>'
                         + '<td>';
                 for (var k = 0; k < group[j].labels.length; k++) {
@@ -400,20 +400,39 @@ $(function () {
         return str;
     }
 
-    function buildImplTable(skdnf, ddnfGroups) { // TODO: fix ddnf...
+    function buildImplTable(skdnf, ddnfGroups) {
+        // Разбиваем по функциям
         var ddnf = [];
+        var impl;
+        var funcGroup;
         for (var i = 0; i < ddnfGroups.length; i++) {
             for (var j = 0; j < ddnfGroups[i].length; j++) {
-                ddnf[ddnf.length] = ddnfGroups[i][j];
+                impl = ddnfGroups[i][j];
+                for (var k = 0; k < impl.labels.length; k++) {
+                    funcGroup = ddnf[impl.labels[k]];
+                    if (funcGroup === undefined)
+                        funcGroup = [];
+                    funcGroup[funcGroup.length] = impl;
+                    ddnf[impl.labels[k]] = funcGroup;
+                }
             }
         }
+        console.log("DDNF split to functions:");
+        console.log(JSON.stringify(ddnf, null, 4));
         resultText.append('<hr>Імплікантна таблиця<br/>');
         var table = $('<table>').addClass('table table-bordered');
-        var headRow = $('<tr>').append('<td>ДДНФ<br/>СкДНФ</td>');
+        var ddnfRow = $('<tr>').append('<td>ДДНФ<br/>СкДНФ</td>');
+        var funcRow = $('<tr>').append($('<td>Func</td>'));
         for (var i = 0; i < ddnf.length; i++) {
-            headRow.append($('<td>').append(ddnf[i].vars));
+            funcRow.append('<td class="text-center" colspan="' + ddnf[i].length + '">' + i + '</td>');
         }
-        table.append($('<thead>').append(headRow));
+        for (var i = 0; i < ddnf.length; i++) { // Обход по групам функций
+            for (var j = 0; j < ddnf[i].length; j++) {
+                impl = ddnf[i][j];
+                ddnfRow.append($('<td>').append(impl.vars).addClass('text-center'));
+            }
+        }
+        table.append($('<thead>').append(funcRow, ddnfRow));
         resultText.append(table);
     }
 
