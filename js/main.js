@@ -53,11 +53,11 @@ $(function () {
     });
 
     $("#btn_ddnf").click(function () {
-        calcFull("ddnf", $("#latexMode").get(0).checked);
+        printFull("ddnf", $("#latexMode").get(0).checked);
     });
 
     $("#btn_dknf").click(function () {
-        calcFull("dknf", $("#latexMode").get(0).checked);
+        printFull("dknf", $("#latexMode").get(0).checked);
     });
 
     $("#btn_quine_mac_klask").click(function () {
@@ -119,23 +119,26 @@ $(function () {
         return {varTable: vars, funcTable: funcs};
     }
 
-// Розрахунок ДДНФ або ДКНФ
-    function calcFull(modeName, latex) {
+    // Розрахунок ДДНФ або ДКНФ
+    function printFull(modeName, latex) {
         var mode = 0;
         if (modeName === 'ddnf')
             mode = 1;
         var data = getTableContent();
         resultText.empty();
-        resultText.append((mode === 1 ? 'ДДНФ' : 'ДКНФ') + '(F<sub>0</sub>) = ');
+		
         var vars = data.varTable;
         var funcs = data.funcTable;
         var rows = vars.length;
-        var implicants = 0;
+        var implicants;
+		for (var f = 0; f < funcs[0].length; f++) {
+		resultText.append((mode === 1 ? 'ДДНФ' : 'ДКНФ') + '(F<sub>' + f + '</sub>) = ');
+		implicants = 0;
         for (var i = 0; i < rows; i++) {
-            if (funcs[i][0] === mode) {
+            if (funcs[i][f] === mode) {
                 var impl = '';
                 if (mode === 1) {
-                    if (implicants++ > 0 ? ' + ' : '') {
+                    if (implicants++ > 0) {
                         impl += '+';
                     }
                 } else {
@@ -159,44 +162,19 @@ $(function () {
                 resultText.append(impl);
             }
         }
+		resultText.append('<hr>');
+		}
     }
 
     function calcQuineMacKlask(latexMode) {
         resultText.empty();
         resultText.append('<strong>Метод Квайна - Мак-Класка</strong><br/>');
         var data = getTableContent();
-        var vars = data.varTable;
-        var funcs = data.funcTable;
         var tableGroups;
-        var groups = [];
-        for (var i = 0; i <= varNum; i++) {
-            var group = [];
-            for (var j = 0; j < vars.length; j++) {
-                var count = 0;
-                var impl = '';
-                var labels = '';
-                var haveFuncOnImpl = false;
-                for (var k = 0; k < funcNum; k++) {
-                    if (funcs[j][k] === 1) {
-                        haveFuncOnImpl = true;
-                        labels += k;
-                    }
-                }
-                if (haveFuncOnImpl) {
-                    for (k = 0; k < varNum; k++) {
-                        impl += vars[j][k];
-                        if (vars[j][k] === 1) {
-                            count++;
-                        }
-                    }
-                    if (count === i) {
-                        group[group.length] = {vars: impl, labels: labels, absorbed: false};
-                    }
-                }
-            }
-            groups[i] = group;
-        }
+        var groups = getGroupsStructure(data.varTable, data.funcTable);
+		var ddnf = groups;
 
+		var skdnf = [];
         var absorbNeeded = true;
         var step = 0;
         while (absorbNeeded) {
@@ -210,10 +188,8 @@ $(function () {
             var newGroup;
             for (i = 0; i < groups.length; i++) {
                 group1 = groups[i];
-                //if (typeof group1 !== 'array') {
                 console.log('///////// NEXT GROUP');
                 console.log(JSON.stringify(group1));
-                //}
                 newGroup = [];
                 for (j = 0; j < group1.length; j++) {
                     for (k = i + 1; k < groups.length; k++) { // Обход по группам что ниже
@@ -245,16 +221,52 @@ $(function () {
                      </tr>'));
             generateTableContent(tableGroups, groups);
             resultText.append($('<div>').addClass('panel panel-default').append(tableGroups));
+			newGroups = removeDuplicateImpl(newGroups);
+			addNotAbsorbed(groups, skdnf);
             groups = newGroups;
         }
+		resultText.append('СкДНФ = ' + implicatesToStr(skdnf));
+		buildImplTable(skdnf, ddnf);
     }
+	
+	function getGroupsStructure(vars, funcs) {
+		var groups = [];
+		for (var i = 0; i <= varNum; i++) {
+            var group = [];
+            for (var j = 0; j < vars.length; j++) {
+                var count = 0;
+                var impl = '';
+                var labels = '';
+                var haveFuncOnImpl = false;
+                for (var k = 0; k < funcNum; k++) {
+                    if (funcs[j][k] === 1) {
+                        haveFuncOnImpl = true;
+                        labels += k;
+                    }
+                }
+                if (haveFuncOnImpl) {
+                    for (k = 0; k < varNum; k++) {
+                        impl += vars[j][k];
+                        if (vars[j][k] === 1) {
+                            count++;
+                        }
+                    }
+                    if (count === i) {
+                        group[group.length] = {vars: impl, labels: labels, absorbed: false};
+                    }
+                }
+            }
+            groups[i] = group;
+        }
+		return groups;
+	}
 
     function generateTableContent(table, groups) {
         var content = '';
         for (var i = 0; i < groups.length; i++) {
             var group = groups[i];
             for (var j = 0; j < group.length; j++) {
-                content += '<tr><td>' + i + '</td>'
+                content += '<tr colspan="' + group.length + '"><td>' + i + '</td>'
                         + '<td>' + group[j].vars + '</td>'
                         + '<td>';
                 for (var k = 0; k < group[j].labels.length; k++) {
@@ -331,6 +343,77 @@ $(function () {
         }
         return false;
     }
+	
+	function removeDuplicateImpl(groups) {
+		var newGroups = [];
+		var newGroup;
+		var group;
+		var skip;
+		for (var i = 0; i < groups.length; i++) {
+			group = groups[i];
+			newGroup = [];
+			for (var j = 0; j < group.length; j++) {
+				skip = false;
+				for (var k = j + 1; k < group.length; k++) {
+					if (group[j].vars === group[k].vars
+					       && group[j].labels === group[k].labels) {
+						skip = true;
+						console.log('SKIP ' + JSON.stringify(group[j]) + ' === ' + JSON.stringify(group[k]));
+						console.log('in group ' + i + ' indexes: ' + j + ' === ' + k);
+						break;
+					}
+				}
+				if (!skip) {
+					newGroup[newGroup.length] = group[j];
+				}
+			}
+			newGroups[i] = newGroup;
+		}
+		return newGroups;
+	}
+	
+	function addNotAbsorbed(groups, skdnfImpl) {
+		var group;
+		for (var i = 0; i < groups.length; i++) {
+			group = groups[i];
+			for (var j = 0; j < group.length; j++) {
+				if (!group[j].absorbed) {
+					skdnfImpl[skdnfImpl.length] = group[j];
+				}
+			}
+		}
+	}
+	
+	function implicatesToStr(impl) {
+		var str = '';
+		for (var i = 0; i < impl.length; i++) {
+			str += impl[i].vars + '(';
+			for (var j = 0; j < impl[i].labels.length; j++) {
+			    str += impl[i].labels[j];
+				if (j < impl[i].labels.length - 1) str += ',';
+			}
+			str += ')';
+			if (i < impl.length - 1) str += ' + ';
+		}
+		return str;
+	}
+	
+	function buildImplTable(skdnf, ddnfGroups) { // TODO: fix ddnf...
+		var ddnf = [];
+		for (var i = 0; i < ddnfGroups.length; i++) {
+			for (var j = 0; j < ddnfGroups[i].length; j++) {
+				ddnf[ddnf.length] = ddnfGroups[i][j];
+			}
+		}
+		resultText.append('<hr>Імплікантна таблиця<br/>');
+		var table = $('<table>').addClass('table table-bordered');
+		var headRow = $('<tr>').append('<td>ДДНФ<br/>СкДНФ</td>');
+		for (var i = 0; i < ddnf.length; i++) {
+			headRow.append($('<td>').append(ddnf[i].vars));
+		}
+		table.append($('<thead>').append(headRow));
+		resultText.append(table);
+	}
 
 });
 
