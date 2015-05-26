@@ -268,13 +268,8 @@ $(function () {
             for (var j = 0; j < group.length; j++) {
                 content += '<tr><td>' + i + '</td>'
                         + '<td>' + group[j].vars + '</td>'
-                        + '<td>';
-                for (var k = 0; k < group[j].labels.length; k++) {
-                    content += group[j].labels[k];
-                    if (k < (group[j].labels.length - 1))
-                        content += ', ';
-                }
-                content += '</td><td>' + (group[j].absorbed ? 'Так' : '') + '</td></tr>\n';
+                        + '<td>' + getHumanReadableLabels(group[j]) + '</td>'
+                        + '<td>' + (group[j].absorbed ? 'Так' : '') + '</td></tr>\n';
             }
         }
         table.append(content);
@@ -387,13 +382,7 @@ $(function () {
     function implicatesToStr(impl) {
         var str = '';
         for (var i = 0; i < impl.length; i++) {
-            str += impl[i].vars + '(';
-            for (var j = 0; j < impl[i].labels.length; j++) {
-                str += impl[i].labels[j];
-                if (j < impl[i].labels.length - 1)
-                    str += ',';
-            }
-            str += ')';
+            str += impl[i].vars + '(' + getHumanReadableLabels(impl[i]) + ')';
             if (i < impl.length - 1)
                 str += ' + ';
         }
@@ -421,6 +410,7 @@ $(function () {
         console.log(JSON.stringify(ddnf, null, 4));
         resultText.append('<hr>Імплікантна таблиця<br/>');
         var table = $('<table>').addClass('table table-bordered');
+        // Generate table head
         var ddnfRow = $('<tr>').append('<td>ДДНФ<br/>СкДНФ</td>');
         var funcRow = $('<tr>').append($('<td>Func</td>'));
         for (var i = 0; i < ddnf.length; i++) {
@@ -433,7 +423,30 @@ $(function () {
             }
         }
         table.append($('<thead>').append(funcRow, ddnfRow));
+        // Generate table body
+        var row;
+        for (var i = 0; i < skdnf.length; i++) {
+            row = $('<tr>').append($('<td>').append(skdnf[i].vars
+                    + '<span class="pull-right">(' + getHumanReadableLabels(skdnf[i]) + ')</span>'));
+            for (var j = 0; j < ddnf.length; j++) {
+                for (var k = 0; k < ddnf[j].length; k++) {
+                    impl = ddnf[j][k];
+                    row.append($('<td>').append('*').addClass('text-center'));
+                }
+            }
+            table.append(row);
+        }
         resultText.append(table);
+    }
+
+    function getHumanReadableLabels(impl) {
+        var labels = '';
+        for (var i = 0; i < impl.labels.length; i++) {
+            labels += impl.labels[i];
+            if (i < impl.labels.length - 1)
+                labels += ', ';
+        }
+        return labels;
     }
 
 });
