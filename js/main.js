@@ -425,18 +425,33 @@ $(function () {
         table.append($('<thead>').append(funcRow, ddnfRow));
         // Generate table body
         var row;
+        var skImpl;
         for (var i = 0; i < skdnf.length; i++) {
-            row = $('<tr>').append($('<td>').append(skdnf[i].vars
-                    + '<span class="pull-right">(' + getHumanReadableLabels(skdnf[i]) + ')</span>'));
-            for (var j = 0; j < ddnf.length; j++) {
-                for (var k = 0; k < ddnf[j].length; k++) {
+            skImpl = skdnf[i];
+            row = $('<tr>').append($('<td>').append(skImpl.vars
+                    + '<span class="pull-right">(' + getHumanReadableLabels(skImpl) + ')</span>'));
+            for (var j = 0; j < ddnf.length; j++) { // Номер функции
+                for (var k = 0; k < ddnf[j].length; k++) {// Номер импликанты
                     impl = ddnf[j][k];
-                    row.append($('<td>').append('*').addClass('text-center'));
+                    if (labelsComparable(skImpl, {labels: String(j)}) && implAinB(skImpl, impl)) {
+                        row.append($('<td>').append('<i class="glyphicon glyphicon-ok"></i>').addClass('text-center'));
+                    } else {
+                        row.append($('<td>').addClass('text-center'));
+                    }
                 }
             }
             table.append(row);
         }
         resultText.append(table);
+    }
+
+    // Impl b must be without '_'
+    function implAinB(a, b) {
+        for (var i = 0; i < a.vars.length; i++) {
+            if (a.vars[i] === '_' || a.vars[i] === b.vars[i]){} //ok
+            else return false;
+        }
+        return true;
     }
 
     function getHumanReadableLabels(impl) {
