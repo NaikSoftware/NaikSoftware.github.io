@@ -409,9 +409,9 @@ $(function () {
         console.log("DDNF split to functions:");
         console.log(JSON.stringify(ddnf, null, 4));
         resultText.append('<hr>Імплікантна таблиця<br/>');
-        var table = $('<table>').addClass('table table-bordered');
+        var table = $('<table>').addClass('table table-bordered modal-body').attr('id', 'impl_table');
         // Generate table head
-        var ddnfRow = $('<tr>').append('<td>ДДНФ<br/>СкДНФ</td>');
+        var ddnfRow = $('<tr>').append('<td style="min-width: 100px;">ДДНФ<br/>СкДНФ</td>');
         var funcRow = $('<tr>').append($('<td>Func</td>'));
         for (var i = 0; i < ddnf.length; i++) {
             funcRow.append('<td class="text-center" colspan="' + ddnf[i].length + '">' + i + '</td>');
@@ -443,7 +443,7 @@ $(function () {
             table.append(row);
         }
         resultText.append(table);
-        resultText.append('<a class="btn btn-default"><span class="glyphicon glyphicon-resize-full"></span></a><br/>');
+        resultText.append('<a class="btn btn-default" onclick="showImplicTable()"><span class="glyphicon glyphicon-resize-full"></span></a><br/>');
     }
 
     // Impl b must be without '_'
@@ -473,6 +473,19 @@ function clickCheckbox(chBox, id) {
         input.val('1');
     else
         input.val('0');
+}
+
+function showImplicTable() {
+	var modal = $('<div>').addClass('modal fade');
+	var dialog = $('<div>').addClass('modal-dialog');
+	var content = $('<div>').addClass('modal-content');
+	var header = $('<div>').addClass('modal-header');
+	var body = $('<div>').addClass('modal-body').attr('style', 'overflow: auto');
+	var data = $('#impl_table');
+	header.append('<button type="button" class="close" data-dismiss="modal">&times;</button>'
+			  + '<h4 class="modal-title">Імплікантна таблиця</h4>');
+	modal.append(dialog.append(content.append(header, body.append(data))));
+	modal.modal('show');
 }
 
 
