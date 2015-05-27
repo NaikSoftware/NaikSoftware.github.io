@@ -481,7 +481,7 @@ function showImplicTable() {
 	var content = $('<div>').addClass('modal-content');
 	var header = $('<div>').addClass('modal-header');
 	var body = $('<div>').addClass('modal-body').attr('style', 'overflow: auto;');
-	var data = $('#impl_table');
+	var data = $('#impl_table').clone(true);
 	header.append('<button type="button" class="close" data-dismiss="modal">&times;</button>'
 			  + '<h4 class="modal-title">Імплікантна таблиця</h4>');
 	modal.append(dialog.append(content.append(header, body.append(data))));
