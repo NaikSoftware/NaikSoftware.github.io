@@ -449,8 +449,10 @@ $(function () {
     // Impl b must be without '_'
     function implAinB(a, b) {
         for (var i = 0; i < a.vars.length; i++) {
-            if (a.vars[i] === '_' || a.vars[i] === b.vars[i]){} //ok
-            else return false;
+            if (a.vars[i] === '_' || a.vars[i] === b.vars[i]) {
+            } //ok
+            else
+                return false;
         }
         return true;
     }
@@ -476,19 +478,20 @@ function clickCheckbox(chBox, id) {
 }
 
 function showImplicTable() {
-	var modal = $('<div>').addClass('modal fade');
-	var w = $('#impl_table').width() + 70;
-	if (w > $('window').width())  w = $('window').width();
-	var dialog = $('<div>').addClass('modal-dialog modal-lg')
-                .css('width', w);
-	var content = $('<div>').addClass('modal-content');
-	var header = $('<div>').addClass('modal-header');
-	var body = $('<div>').addClass('modal-body').attr('style', 'overflow: auto;');
-	var data = $('#impl_table').clone(true);
-	header.append('<button type="button" class="close" data-dismiss="modal">&times;</button>'
-			  + '<h4 class="modal-title">Імплікантна таблиця</h4>');
-	modal.append(dialog.append(content.append(header, body.append(data))));
-	modal.modal('show');
+    var modal = $('<div>').addClass('modal fade');
+    var w = $('#impl_table').width() + 70;
+    if (w > $(window).width())
+        w = $(window).width();
+    var dialog = $('<div>').addClass('modal-dialog modal-lg')
+            .css('width', w);
+    var content = $('<div>').addClass('modal-content');
+    var header = $('<div>').addClass('modal-header');
+    var body = $('<div>').addClass('modal-body').attr('style', 'overflow: auto;');
+    var data = $('#impl_table').clone(true);
+    header.append('<button type="button" class="close" data-dismiss="modal">&times;</button>'
+            + '<h4 class="modal-title">Імплікантна таблиця</h4>');
+    modal.append(dialog.append(content.append(header, body.append(data))));
+    modal.modal('show');
 }
 
 
