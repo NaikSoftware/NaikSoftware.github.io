@@ -477,7 +477,9 @@ function clickCheckbox(chBox, id) {
 
 function showImplicTable() {
 	var modal = $('<div>').addClass('modal fade');
-	var dialog = $('<div>').addClass('modal-dialog modal-lg').css('width', $('#impl_table').width() + 70);
+	var dialog = $('<div>').addClass('modal-dialog modal-lg')
+                .css('width', $('#impl_table').width() + 70)
+                .css('overflow', 'auto');
 	var content = $('<div>').addClass('modal-content');
 	var header = $('<div>').addClass('modal-header');
 	var body = $('<div>').addClass('modal-body').attr('style', 'overflow: auto;');
