@@ -443,7 +443,12 @@ $(function () {
             table.append(row);
         }
         resultText.append(table);
-        resultText.append('<a class="btn btn-default" onclick="showImplicTable()"><span class="glyphicon glyphicon-resize-full"></span></a><br/>');
+        resultText.append('<div class="input-group">'
+                + '<a class="btn btn-default input-group-addon" onclick="showImplicTable()"><span class="glyphicon glyphicon-resize-full"></span></a>'
+
+                + '<span class="input-group-addon"><input type="checkbox" id="showMini"></input></span>'
+                + '<span class="form-control">Розгорнути в мінімальному розмірі</span>'
+                + '</div><br/>');
     }
 
     // Impl b must be without '_'
@@ -488,6 +493,11 @@ function showImplicTable() {
     var header = $('<div>').addClass('modal-header');
     var body = $('<div>').addClass('modal-body').attr('style', 'overflow: auto;');
     var data = $('#impl_table').clone(true);
+    if ($('#showMini')[0].checked) {
+        data.css('font-size', '10.5px');
+        data.css('width', '0px');
+        data.find('td').css('padding', '0px');
+    }
     header.append('<button type="button" class="close" data-dismiss="modal">&times;</button>'
             + '<h4 class="modal-title">Імплікантна таблиця</h4>');
     modal.append(dialog.append(content.append(header, body.append(data))));
