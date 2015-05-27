@@ -477,10 +477,10 @@ function clickCheckbox(chBox, id) {
 
 function showImplicTable() {
 	var modal = $('<div>').addClass('modal fade');
-	var dialog = $('<div>').addClass('modal-dialog');
+	var dialog = $('<div>').addClass('modal-dialog modal-lg').css('width', $('#impl_table').width() + 70);
 	var content = $('<div>').addClass('modal-content');
 	var header = $('<div>').addClass('modal-header');
-	var body = $('<div>').addClass('modal-body').attr('style', 'overflow: auto');
+	var body = $('<div>').addClass('modal-body').attr('style', 'overflow: auto;');
 	var data = $('#impl_table');
 	header.append('<button type="button" class="close" data-dismiss="modal">&times;</button>'
 			  + '<h4 class="modal-title">Імплікантна таблиця</h4>');

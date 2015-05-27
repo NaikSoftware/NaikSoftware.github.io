@@ -1,3 +1,16 @@
 .overline {
-     text-decoration: overline;
+    text-decoration: overline;
+}
+
+.modal 
+{ 
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.modal-dialog
+{ 
+    max-height: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
 }
