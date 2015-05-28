@@ -386,6 +386,8 @@ $(function () {
             if (i < impl.length - 1)
                 str += ' + ';
         }
+        if (str === '')
+            str = 'any';
         return str;
     }
 
@@ -426,15 +428,20 @@ $(function () {
         // Generate table body
         var row;
         var skImpl;
+        var map = [];
+        var colIdx;
         for (var i = 0; i < skdnf.length; i++) {
             skImpl = skdnf[i];
             row = $('<tr>').append($('<td nowrap>').append(skImpl.vars
                     + '<span class="pull-right">(' + getHumanReadableLabels(skImpl) + ')</span>'));
+            colIdx = 0;
             for (var j = 0; j < ddnf.length; j++) { // Номер функции
                 for (var k = 0; k < ddnf[j].length; k++) {// Номер импликанты
                     impl = ddnf[j][k];
+                    colIdx++;
                     if (labelsComparable(skImpl, {labels: String(j)}) && implAinB(skImpl, impl)) {
-                        row.append($('<td>').append('<i class="glyphicon glyphicon-ok"></i>').addClass('text-center'));
+                        row.append($('<td>').append('<i class="glyphicon glyphicon-ok"></i>').addClass('text-center').attr('id', 'r' + i + 'c' + colIdx));
+                        map[map.length] = {impl: skImpl, row: i, col: colIdx};
                     } else {
                         row.append($('<td>').addClass('text-center'));
                     }
@@ -449,6 +456,90 @@ $(function () {
                 + '<span class="input-group-addon"><input type="checkbox" id="showMini"></input></span>'
                 + '<span class="form-control">Розгорнути в мінімальному розмірі</span>'
                 + '</div><br/>');
+        var mdnf = [];
+        var closedCols = [];
+        // Теперь находим ядра функций
+        for (var i = 0; i < map.length; i++) {
+            if (inColumnCount(map[i], map) === 1 && !inClosed(map[i], closedCols)) {
+                mdnf[mdnf.length] = map[i].impl;
+                map[i].kernel = true;
+                map[i].closed = true;
+                $('#r' + map[i].row + 'c' + map[i].col).css('background-color', '#00CC00');
+                closedCols[closedCols.length] = map[i].col;
+                closeOtherInRow(map[i], map, closedCols);
+            }
+        }
+        // Выбираем остальные импликанты
+        var elem;
+        while (closedCols.length < colIdx) {
+            elem = switchElem(map, closedCols);
+            mdnf[mdnf.length] = elem.impl;
+            elem.closed = true;
+            closedCols[closedCols.length] = elem.col;
+            $('#r' + elem.row + 'c' + elem.col).css('background-color', 'cyan');
+            closeOtherInRow(elem, map, closedCols);
+        }
+        // Out minimal form
+        printMdnf(mdnf, $("#latexMode").get(0).checked);
+    }
+
+    function inColumnCount(mapElem, map) {
+        var n = 0;
+        for (var i = 0; i < map.length; i++) {
+            if (mapElem.col === map[i].col)
+                n++;
+        }
+        return n;
+    }
+
+    function closeOtherInRow(mapElem, map, closedCols) {
+        for (var i = 0; i < map.length; i++) {
+            if (map[i].row === mapElem.row) {
+                if (!inClosed(map[i], closedCols)) {
+                    $('#r' + map[i].row + 'c' + map[i].col).css('background-color', 'yellow');
+                    closedCols[closedCols.length] = map[i].col;
+                }
+            }
+        }
+
+    }
+
+    function inClosed(mapElem, closedCols) {
+        for (var i = 0; i < closedCols.length; i++) {
+            if (mapElem.col === closedCols[i])
+                return true;
+        }
+        return false;
+    }
+
+    function switchElem(map, closedCols) {
+        var best;
+        var countInRow, maxCount = 0;
+        var varsInImpl, minVars = 999;
+        for (var i = 0; i < map.length; i++) {
+            if (inClosed(map[i], closedCols))
+                continue;
+            countInRow = 0;
+            for (var j = 0; j < map.length; j++) {
+                if (!inClosed(map[j], closedCols) && map[j].row === map[i].row) {
+                    countInRow++;
+                }
+            }
+            if (countInRow >= maxCount) {
+                varsInImpl = 0;
+                for (var j = 0; j < map[i].impl.vars.length; j++) {
+                    if (map[i].impl.vars[j] !== '_') {
+                        varsInImpl++;
+                    }
+                }
+                if (varsInImpl < minVars) {
+                    maxCount = countInRow;
+                    minVars = varsInImpl;
+                    best = map[i];
+                }
+            }
+        }
+        return best;
     }
 
     // Impl b must be without '_'
@@ -472,6 +563,13 @@ $(function () {
         return labels;
     }
 
+    function printMdnf(mdnf, latexMode) {
+        var mdnfStr = 'МДНФ=' + implicatesToStr(mdnf);
+        resultText.append(mdnfStr);
+        mdnfStr = mdnfStr.replace(/(.+)/, '');
+        resultText.append('<br/>' + mdnfStr);
+    }
+
 });
 
 function clickCheckbox(chBox, id) {
@@ -485,8 +583,8 @@ function clickCheckbox(chBox, id) {
 function showImplicTable() {
     var modal = $('<div>').addClass('modal fade');
     var w = $('#impl_table').width() + 70;
-    if (w > $(window).width())
-        w = $(window).width();
+    if (w > $('window').width())
+        w = $('window').width();
     var dialog = $('<div>').addClass('modal-dialog modal-lg')
             .css('width', w);
     var content = $('<div>').addClass('modal-content');
@@ -496,7 +594,7 @@ function showImplicTable() {
     if ($('#showMini')[0].checked) {
         data.css('font-size', '10.5px');
         data.css('width', '0px');
-        data.find('td').css('padding', '0px');
+        data.find('td').css('padding', '2px');
     }
     header.append('<button type="button" class="close" data-dismiss="modal">&times;</button>'
             + '<h4 class="modal-title">Імплікантна таблиця</h4>');
