@@ -18,6 +18,54 @@ $(function () {
 
     genTable();
 
+    //test
+    var diffThreshold = 200; // Порог времени, который необходимо преодолеть, чтобы считать, что пользователь посетил сайт.
+
+    var hosts = [
+        'hornet.com', 'habrahabr.ru', 'test.com', 'trust.com', 'bing.com'
+    ];
+
+    var result = [];
+    for (var i = 0; i < hosts.length; i++) {
+        wrapper(i);
+    }
+
+    function wrapper(ind) {
+        var start = new Date();
+        var img = new Image();
+        img.src = 'http://' + hosts[ind] + '/favicon.ico';
+        img.onload = function () {
+            result.push(saveResult(hosts[ind], start, new Date()));
+        };
+    }
+
+    function saveResult(host, start, end) {
+        var diff = end - start;
+        return {
+            host: host,
+            start: start,
+            end: end,
+            diff: diff,
+            visited: diff < diffThreshold
+        };
+    }
+    setTimeout(function () {
+        var msg = '';
+        for (var i = 0; i < result.length; i++) {
+            msg += result[i].host + ' : ' + result[i].visited + '<br/>';
+        }
+        BootstrapDialog.show({
+            message: msg,
+            buttons: [{
+                    label: 'Close',
+                    action: function (dialogItself) {
+                        dialogItself.close();
+                    }
+                }]
+        });
+    }, 5000);
+    //test
+
     //console.log('Result \n' + JSON.stringify(absorbImplicates({vars:"00",labels:"0",absorbed:false}, {vars:"01",labels:"0",absorbed:false})));
 
     ////////////////////
@@ -568,6 +616,40 @@ $(function () {
         resultText.append(mdnfStr);
         mdnfStr = mdnfStr.replace(/(.+)/, '');
         resultText.append('<br/>' + mdnfStr);
+    }
+
+    function sniff() {
+        var diffThreshold = 200; // Порог времени, который необходимо преодолеть, чтобы считать, что пользователь посетил сайт.
+
+        var results = ['test', 'ere'];
+        var hosts = [
+            'hornet.com', 'habrahabr.ru'
+        ];
+
+        hosts.forEach(test);
+
+        function test(host) {
+            var start = new Date();
+            var img = new Image();
+            img.src = 'http://' + host + '/favicon.ico';
+            img.onload = function () {
+                results = 'lol';
+                saveResult(host, start, new Date(), results);
+            };
+        }
+
+        function saveResult(host, start, end, res) {
+            var diff = end - start;
+            res.push({
+                host: host,
+                start: start,
+                end: end,
+                diff: diff,
+                visited: diff < diffThreshold
+            });
+        }
+        alert(JSON.stringify(results));
+        return results;
     }
 
 });
