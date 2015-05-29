@@ -19,10 +19,10 @@ $(function () {
     genTable();
 
     //test
-    var diffThreshold = 200; // Порог времени, который необходимо преодолеть, чтобы считать, что пользователь посетил сайт.
+    var diffThreshold = 200;
 
     var hosts = [
-        'hornet.com', 'habrahabr.ru', 'test.com', 'trust.com', 'bing.com'
+        'yandex.com', 'habrahabr.ru', 'lol.com', 'johncms.com', 'ya.ru', 'getfedora.org'
     ];
 
     var result = [];
