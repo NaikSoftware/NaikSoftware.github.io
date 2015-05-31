@@ -18,54 +18,6 @@ $(function () {
 
     genTable();
 
-    //test
-    var diffThreshold = 200;
-
-    var hosts = [
-        'yandex.com', 'habrahabr.ru', 'lol.com', 'johncms.com', 'ya.ru', 'getfedora.org'
-    ];
-
-    var result = [];
-    for (var i = 0; i < hosts.length; i++) {
-        wrapper(i);
-    }
-
-    function wrapper(ind) {
-        var start = new Date();
-        var img = new Image();
-        img.src = 'http://' + hosts[ind] + '/favicon.ico';
-        img.onload = function () {
-            result.push(saveResult(hosts[ind], start, new Date()));
-        };
-    }
-
-    function saveResult(host, start, end) {
-        var diff = end - start;
-        return {
-            host: host,
-            start: start,
-            end: end,
-            diff: diff,
-            visited: diff < diffThreshold
-        };
-    }
-    setTimeout(function () {
-        var msg = '';
-        for (var i = 0; i < result.length; i++) {
-            msg += result[i].host + ' : ' + result[i].visited + '<br/>';
-        }
-        BootstrapDialog.show({
-            message: msg,
-            buttons: [{
-                    label: 'Close',
-                    action: function (dialogItself) {
-                        dialogItself.close();
-                    }
-                }]
-        });
-    }, 5000);
-    //test
-
     //console.log('Result \n' + JSON.stringify(absorbImplicates({vars:"00",labels:"0",absorbed:false}, {vars:"01",labels:"0",absorbed:false})));
 
     ////////////////////
@@ -489,7 +441,7 @@ $(function () {
                     colIdx++;
                     if (labelsComparable(skImpl, {labels: String(j)}) && implAinB(skImpl, impl)) {
                         row.append($('<td>').append('<i class="glyphicon glyphicon-ok"></i>').addClass('text-center').attr('id', 'r' + i + 'c' + colIdx));
-                        map[map.length] = {impl: skImpl, row: i, col: colIdx};
+                        map[map.length] = {impl: skImpl, row: i, col: colIdx, func: String(j)};
                     } else {
                         row.append($('<td>').addClass('text-center'));
                     }
@@ -514,18 +466,19 @@ $(function () {
                 map[i].closed = true;
                 $('#r' + map[i].row + 'c' + map[i].col).css('background-color', '#00CC00');
                 closedCols[closedCols.length] = map[i].col;
-                closeOtherInRow(map[i], map, closedCols);
+                closeOtherInRow(map[i], map, closedCols, true);
             }
         }
         // Выбираем остальные импликанты
         var elem;
+        var queue = 0;
         while (closedCols.length < colIdx) {
             elem = switchElem(map, closedCols);
             mdnf[mdnf.length] = elem.impl;
             elem.closed = true;
             closedCols[closedCols.length] = elem.col;
-            $('#r' + elem.row + 'c' + elem.col).css('background-color', 'cyan');
-            closeOtherInRow(elem, map, closedCols);
+            $('#r' + elem.row + 'c' + elem.col).css('background-color', 'cyan').append(queue++);/* + '(' + elem.inRow + ' ' + elem.implLen + ')');*/
+            closeOtherInRow(elem, map, closedCols, false);
         }
         // Out minimal form
         printMdnf(mdnf, $("#latexMode").get(0).checked);
@@ -540,9 +493,11 @@ $(function () {
         return n;
     }
 
-    function closeOtherInRow(mapElem, map, closedCols) {
+    function closeOtherInRow(mapElem, map, closedCols, kernelElem) {
         for (var i = 0; i < map.length; i++) {
             if (map[i].row === mapElem.row) {
+                if (kernelElem && mapElem.func !== map[i].func)
+                    continue;
                 if (!inClosed(map[i], closedCols)) {
                     $('#r' + map[i].row + 'c' + map[i].col).css('background-color', 'yellow');
                     closedCols[closedCols.length] = map[i].col;
@@ -580,13 +535,15 @@ $(function () {
                         varsInImpl++;
                     }
                 }
-                if (varsInImpl < minVars) {
+                if (varsInImpl <= minVars) {
                     maxCount = countInRow;
                     minVars = varsInImpl;
                     best = map[i];
                 }
             }
         }
+        best.inRow = maxCount;
+        best.implLen = minVars;
         return best;
     }
 
@@ -618,40 +575,6 @@ $(function () {
         resultText.append('<br/>' + mdnfStr);
     }
 
-    function sniff() {
-        var diffThreshold = 200; // Порог времени, который необходимо преодолеть, чтобы считать, что пользователь посетил сайт.
-
-        var results = ['test', 'ere'];
-        var hosts = [
-            'hornet.com', 'habrahabr.ru'
-        ];
-
-        hosts.forEach(test);
-
-        function test(host) {
-            var start = new Date();
-            var img = new Image();
-            img.src = 'http://' + host + '/favicon.ico';
-            img.onload = function () {
-                results = 'lol';
-                saveResult(host, start, new Date(), results);
-            };
-        }
-
-        function saveResult(host, start, end, res) {
-            var diff = end - start;
-            res.push({
-                host: host,
-                start: start,
-                end: end,
-                diff: diff,
-                visited: diff < diffThreshold
-            });
-        }
-        alert(JSON.stringify(results));
-        return results;
-    }
-
 });
 
 function clickCheckbox(chBox, id) {
@@ -665,16 +588,16 @@ function clickCheckbox(chBox, id) {
 function showImplicTable() {
     var modal = $('<div>').addClass('modal fade');
     var w = $('#impl_table').width() + 70;
-    if (w > $('window').width())
-        w = $('window').width();
-    var dialog = $('<div>').addClass('modal-dialog modal-lg')
+    if (w > $(window).width())
+        w = $(window).width();
+    var dialog = $('<div>').addClass('modal-dialog modal-lg');
+    var content = $('<div>').addClass('modal-content')
             .css('width', w);
-    var content = $('<div>').addClass('modal-content');
     var header = $('<div>').addClass('modal-header');
     var body = $('<div>').addClass('modal-body').attr('style', 'overflow: auto;');
     var data = $('#impl_table').clone(true);
     if ($('#showMini')[0].checked) {
-        data.css('font-size', '10.5px');
+        data.css('font-size', '14px');
         data.css('width', '0px');
         data.find('td').css('padding', '2px');
     }
@@ -683,6 +606,3 @@ function showImplicTable() {
     modal.append(dialog.append(content.append(header, body.append(data))));
     modal.modal('show');
 }
-
-
-
