@@ -110,7 +110,9 @@ $(function () {
                 if (idx2 < varNum) {
                     row[idx2] = Number(valTd.innerText);
                 } else {
-                    func[idx2 - varNum] = Number($(valTd).find("input[type=text]").val());
+                    var fidx = idx2 - varNum;
+                    func[fidx] = $(valTd).find("input[type=text]").val();
+                    if (func[fidx] !== '*') func[fidx] = Number(func[fidx]);
                 }
             });
             vars[idx] = row;
@@ -135,7 +137,7 @@ $(function () {
             resultText.append((mode === 1 ? 'ДДНФ' : 'ДКНФ') + '(F<sub>' + f + '</sub>) = ');
             implicants = 0;
             for (var i = 0; i < rows; i++) {
-                if (funcs[i][f] === mode) {
+                if (funcs[i][f] === mode || funcs[i][f] === '*') {
                     var impl = '';
                     if (mode === 1) {
                         if (implicants++ > 0) {
@@ -238,10 +240,15 @@ $(function () {
                 var impl = '';
                 var labels = '';
                 var haveFuncOnImpl = false;
+                var implWithUndef = false;
                 for (var k = 0; k < funcNum; k++) {
                     if (funcs[j][k] === 1) {
                         haveFuncOnImpl = true;
                         labels += k;
+                    } else if (funcs[j][k] === '*') {
+                        haveFuncOnImpl = true;
+                        labels += k;
+                        implWithUndef = true;
                     }
                 }
                 if (haveFuncOnImpl) {
@@ -252,7 +259,7 @@ $(function () {
                         }
                     }
                     if (count === i) {
-                        group[group.length] = {vars: impl, labels: labels, absorbed: false};
+                        group[group.length] = {vars: impl, labels: labels, absorbed: false, undef: implWithUndef};
                     }
                 }
             }
@@ -399,6 +406,7 @@ $(function () {
         for (var i = 0; i < ddnfGroups.length; i++) {
             for (var j = 0; j < ddnfGroups[i].length; j++) {
                 impl = ddnfGroups[i][j];
+                if (impl.undef) continue;
                 for (var k = 0; k < impl.labels.length; k++) {
                     funcGroup = ddnf[impl.labels[k]];
                     if (funcGroup === undefined)
