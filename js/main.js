@@ -498,7 +498,7 @@ $(function () {
             if (map[i].row === mapElem.row) {
                 // Разрешаем закрывать ячейки даже в "чужих" функциях, поэтому закоментировано
                 /*if (kernelElem && mapElem.func !== map[i].func)
-                    continue;*/
+                 continue;*/
                 if (!inClosed(map[i], closedCols)) {
                     $('#r' + map[i].row + 'c' + map[i].col).css('background-color', 'yellow');
                     closedCols[closedCols.length] = map[i].col;
@@ -578,12 +578,28 @@ $(function () {
 
 });
 
+var lastChecked = false;
+var lastChBox;
 function clickCheckbox(chBox, id) {
     var input = $('#' + id);
-    if (chBox.checked)
+    if (chBox.checked) {
         input.val('1');
-    else
-        input.val('0');
+        if (lastChBox !== chBox) {
+            lastChecked = true;
+            lastChBox = chBox;
+        }
+    } else {
+        if (lastChecked) {
+            lastChecked = false;
+            input.val('*');
+        } else {
+            input.val('0');
+        }
+    }
+    if (lastChBox !== chBox) {
+        lastChBox = undefined;
+        lastChecked = false;
+    }
 }
 
 function showImplicTable() {
