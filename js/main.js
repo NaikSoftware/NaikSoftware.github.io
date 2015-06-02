@@ -496,8 +496,9 @@ $(function () {
     function closeOtherInRow(mapElem, map, closedCols, kernelElem) {
         for (var i = 0; i < map.length; i++) {
             if (map[i].row === mapElem.row) {
-                if (kernelElem && mapElem.func !== map[i].func)
-                    continue;
+                // Разрешаем закрывать ячейки даже в "чужих" функциях, поэтому закоментировано
+                /*if (kernelElem && mapElem.func !== map[i].func)
+                    continue;*/
                 if (!inClosed(map[i], closedCols)) {
                     $('#r' + map[i].row + 'c' + map[i].col).css('background-color', 'yellow');
                     closedCols[closedCols.length] = map[i].col;
