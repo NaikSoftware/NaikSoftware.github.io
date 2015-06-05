@@ -112,7 +112,8 @@ $(function () {
                 } else {
                     var fidx = idx2 - varNum;
                     func[fidx] = $(valTd).find("input[type=text]").val();
-                    if (func[fidx] !== '*') func[fidx] = Number(func[fidx]);
+                    if (func[fidx] !== '*')
+                        func[fidx] = Number(func[fidx]);
                 }
             });
             vars[idx] = row;
@@ -240,15 +241,15 @@ $(function () {
                 var impl = '';
                 var labels = '';
                 var haveFuncOnImpl = false;
-                var implWithUndef = false;
+                var undefFuncs = '';
                 for (var k = 0; k < funcNum; k++) {
                     if (funcs[j][k] === 1) {
                         haveFuncOnImpl = true;
                         labels += k;
                     } else if (funcs[j][k] === '*') {
                         haveFuncOnImpl = true;
+                        undefFuncs += k;
                         labels += k;
-                        implWithUndef = true;
                     }
                 }
                 if (haveFuncOnImpl) {
@@ -259,7 +260,7 @@ $(function () {
                         }
                     }
                     if (count === i) {
-                        group[group.length] = {vars: impl, labels: labels, absorbed: false, undef: implWithUndef};
+                        group[group.length] = {vars: impl, labels: labels, absorbed: false, undef: undefFuncs};
                     }
                 }
             }
@@ -406,8 +407,8 @@ $(function () {
         for (var i = 0; i < ddnfGroups.length; i++) {
             for (var j = 0; j < ddnfGroups[i].length; j++) {
                 impl = ddnfGroups[i][j];
-                if (impl.undef) continue;
                 for (var k = 0; k < impl.labels.length; k++) {
+                    if (impl.undef.indexOf(impl.labels[k]) !== -1) continue;
                     funcGroup = ddnf[impl.labels[k]];
                     if (funcGroup === undefined)
                         funcGroup = [];
