@@ -1,3 +1,7 @@
 .overline {
     text-decoration: overline;
 }
+
+.default_body_style {
+     background-color: #c8e5bc;
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<!--
+QuineCalc project
+@author Naik
+-->
+<html>
+    <head>
+        <title>QuineCalc</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link href="css/main.css" rel="stylesheet" media="screen">
+        <script src="js/jquery/jquery.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/main.js"></script>
+    </head>
+    <body class="container default_body_style">
+        <div class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header" style="width: 100%">
+                    <a class="navbar-brand" href="index.html"><span class="glyphicon glyphicon-menu-left" style="font-size: 40px; text-align: center;"></span></a>
+                    <h1 class="navbar-text page-header">QuineCalc Online</h1>
+                    <div class="navbar-brand navbar-right">
+                        <img alt="NaikSoftware" src="https://avatars0.githubusercontent.com/u/4218994?v=3&amp;s=48"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4 class="text-center"><span class="glyphicon glyphicon-menu-hamburger"></span> Таблиця істинності</h4></div>
+            <div class="panel-body" style="text-align: center;">
+
+                <div class="btn-group-xs" style="margin-bottom: 1em;">
+                    <!-- Variables counter -->
+                    <span class="text-success" style="margin-right: 1em;">
+                        V:
+                        <a id="btn_minus" class="btn btn-success"><span class="glyphicon glyphicon-minus"></span></a>
+                        <span id="label_num" class="btn disabled"></span>
+                        <a id="btn_plus" class="btn btn-success"><span class="glyphicon glyphicon-plus"></span></a>
+                    </span>
+                    <!-- Functions counter -->
+                    <span class="text-info">
+                        F:
+                        <a id="btn_minus_f" class="btn btn-info"><span class="glyphicon glyphicon-minus"></span></a>
+                        <span id="label_num_f" class="btn disabled"></span>
+                        <a id="btn_plus_f" class="btn btn-info"><span class="glyphicon glyphicon-plus"></span></a>
+                    </span>
+                </div>
+                <div class="panel panel-default" style="overflow: auto">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr id="truth_table_head" class="bg-success">
+                            </tr>
+                        </thead>
+                        <tbody id="truth_table_body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-success col-lg-12">
+            <div class="panel-body">
+                <div class="btn-group-vertical col-lg-4">
+                    <a id="btn_ddnf" class="btn btn-default"><span class="glyphicon glyphicon-pushpin pull-left"></span>ДДНФ</a>
+                    <a id="btn_dknf" class="btn btn-default"><span class="glyphicon glyphicon-pushpin pull-left"></span>ДКНФ</a>
+                    <a id="btn_quine_mac_klask" class="btn btn-default"><span class="glyphicon glyphicon-pushpin pull-left"></span>Метод Куайна - Мак Класка </a>
+                    <hr>
+                    <div class="input-group" style="margin-bottom: 10px">
+                        <span class="input-group-addon">Використовувати LaTeX формат</span>
+                        <span class="input-group-addon">
+                            <input type="checkbox" id="latexMode"/>
+                        </span>
+                    </div>
+                </div>
+                <div class="panel panel-default col-lg-offset-4" style="display: inline">
+                    <div id="result_text" style="min-height: 100px; font-size: 14px; padding: 7px; overflow: auto;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom text-center text-info" style="margin-bottom: 10px">
+            <span class="glyphicon glyphicon-copyright-mark"></span>
+            <span class="text-info">NaikSoftware</span>
+        </div>
+
+
+
+        <!-- Yandex.Metrika counter -->
+        <script type="text/javascript">
+            (function (d, w, c) {
+                (w[c] = w[c] || []).push(function () {
+                    try {
+                        w.yaCounter30557997 = new Ya.Metrika({id: 30557997,
+                            webvisor: true,
+                            clickmap: true,
+                            trackLinks: true,
+                            accurateTrackBounce: true});
+                    } catch (e) {
+                    }
+                });
+
+                var n = d.getElementsByTagName("script")[0],
+                        s = d.createElement("script"),
+                        f = function () {
+                            n.parentNode.insertBefore(s, n);
+                        };
+                s.type = "text/javascript";
+                s.async = true;
+                s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+                if (w.opera == "[object Opera]") {
+                    d.addEventListener("DOMContentLoaded", f, false);
+                } else {
+                    f();
+                }
+            })(document, window, "yandex_metrika_callbacks");
+        </script>
+        <noscript><div><img src="//mc.yandex.ru/watch/30557997" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+        <!-- /Yandex.Metrika counter -->
+
+    </body>
+</html>

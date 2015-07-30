@@ -1,7 +1,10 @@
 $(function () {
 
+    var MAX_DIFF = 400;//ms
+
     var hosts = [
-        'yandex.com', 'habrahabr.ru', 'lol.com', 'johncms.com', 'basic.com', 'getfedora.org'
+        'yandex.com', 'habrahabr.ru', 'lol.com', 'johncms.com', 'basic.com', 'annimon.com', 'keddr.ru',
+        'java.com', 'mail.ru', 'android.com'
     ];
 
     var processed = 0;
@@ -44,19 +47,17 @@ $(function () {
             setTimeout(monitor, 1000);
             return;
         }
-        var msg = '';
+        
+        var msg = $('<ul>');
 
         for (var i = 0; i < result.length; i++) {
-            msg += result[i].host + ' : ' + result[i].visited + '<br/>';
+            var visited = (result[i].diff < MAX_DIFF ? true : false);
+            var li = $('<li>').append(result[i].host + ' : ' + (visited ? 'visited' : 'unvisited') + '</li>');
+            if (visited) li.addClass('text-primary');
+            msg.append(li);
         }
-        BootstrapDialog.show({
-            message: msg,
-            buttons: [{
-                    label: 'Close',
-                    action: function (dialogItself) {
-                        dialogItself.close();
-                    }
-                }]
-        });
+        
+        $('#panel_body').append(msg);
     }
+    
 });
