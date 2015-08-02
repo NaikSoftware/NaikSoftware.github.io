@@ -3,8 +3,11 @@
 }
 
 .default_body_style {
-	background-image: url("../img/bg.jpg");
-        background-color: #c8e5bc;
+    background-image: url("../img/bg.jpg");
+    background-attachment: fixed;
+    background-position: center; 
+    background-color: #c8e5bc;
+    padding-top: 100px;
 }
 
 .navbar {
