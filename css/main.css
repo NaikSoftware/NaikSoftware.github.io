@@ -3,5 +3,10 @@
 }
 
 .default_body_style {
-     background-color: #c8e5bc;
+	background-image: url("../img/bg.jpg");
+        background-color: #c8e5bc;
+}
+
+.navbar {
+    background-color: turquoise;
 }
