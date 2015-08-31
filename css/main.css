@@ -7,9 +7,16 @@
     background-attachment: fixed;
     background-position: center; 
     background-color: #c8e5bc;
-    padding-top: 100px;
 }
 
 .navbar {
     background-color: turquoise;
+}
+
+.navbar-right {
+    margin-right: 1px;
+}
+
+.large-size {
+    font-size: 27px;
 }
