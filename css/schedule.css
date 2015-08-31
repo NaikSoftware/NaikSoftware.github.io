@@ -9,6 +9,7 @@
 
 .lesson_number {
     width: 1.2cm;
+	background: rgba(170, 170, 220, .1);
 }
 
 .lesson_text {
