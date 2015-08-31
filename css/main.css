@@ -22,8 +22,9 @@ repeating-linear-gradient(135deg, transparent 5px, hsla(197, 62%, 11%, 0.5) 5px,
 }
 
 .navbar {
-    background: rgba(170,200,150,.5);
-    color: #AAll;
+    background: rgba(150,150,150,.7);
+    color: #ffffff;
+	padding-left: 0.3cm;
 }
 
 .navbar-right {

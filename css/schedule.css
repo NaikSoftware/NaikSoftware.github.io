@@ -16,8 +16,20 @@
 
 }
 
-.table-responsive {
-    border-collapse: separate;
-    border-spacing: 10px;
+.flex-container {
+    display: flex;
+	flex-flow: row wrap;
+	justify-content: space-around;
+	align-items: flex-start;
+	align-content: space-around;
 }
+
+.flex-item {
+  flex-grow: 1;
+  flex-basis: 200px;
+}
+
+.flex-container { margin: -20px 0 0 -20px; }
+.flex-item > *{ margin: 0 0 0 20px; }    
+.flex-container > *{ margin: 20px 0 0 0; }
 
