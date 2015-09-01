@@ -9,7 +9,7 @@
 
 .lesson_number {
     width: 1.2cm;
-	background: rgba(170, 170, 220, .1);
+    background: rgba(170, 170, 220, .1);
 }
 
 .lesson_text {
@@ -18,18 +18,32 @@
 
 .flex-container {
     display: flex;
-	flex-flow: row wrap;
-	justify-content: space-around;
-	align-items: flex-start;
-	align-content: space-around;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
 }
 
 .flex-item {
-  flex-grow: 1;
-  flex-basis: 200px;
+    flex-grow: 1;
+    flex-basis: 6cm;
+    max-width: 100%;
 }
 
-.flex-container { margin: -20px 0 0 -20px; }
+@media screen and (min-width: 27cm) {
+    .flex-item {
+        max-width: 25%;
+    }
+}
+
+@media screen and (min-width: 15cm) and (max-width: 27cm){
+    .flex-item {
+        max-width: 50%;
+    }
+}
+
+
+.flex-container { margin: -20px 0 0 -40px; }
 .flex-item > *{ margin: 0 0 0 20px; }    
 .flex-container > *{ margin: 20px 0 0 0; }
 
