@@ -16,6 +16,10 @@
 
 }
 
+.lesson-time {
+    font-style: italic;
+}
+
 .flex-container {
     display: flex;
     flex-flow: row wrap;

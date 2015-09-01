@@ -6,7 +6,6 @@ $(function () {
     $(window).resize(adjustScreenSize($(window).width()));
 
     function adjustScreenSize(width) {
-        console.log('Resize: ' + width);
         if (width < 800) {
             navbar.removeClass('navbar-fixed-top');
             body.css('padding-top', '0px');
