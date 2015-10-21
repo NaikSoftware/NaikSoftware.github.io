@@ -81,6 +81,7 @@ $(function () {
         }
 
         // Gen body
+        var states = [{text: "0", active: true}, {text: "*"}, {text: "1"}];
         var body = $("#truth_table_body").empty();
         var rows = Math.pow(2, varNum);
         for (var i = 0; i < rows; i++) {
@@ -91,9 +92,9 @@ $(function () {
                 row.append("<td>" + (m % 2 === 0 ? "0" : "1") + "</td>");
             }
             for (j = 1; j <= funcNum; j++) {
-                row.append('<td style="width: 100px"><div class="input-group">'
-                        + '<span class="input-group-addon"><input type="checkbox" onclick="clickCheckbox(this, \'row' + i + 'f' + j + '\')"></span>'
-                        + '<input type="text" id="row' + i + 'f' + j + '" class="form-control" disabled value="0" style="min-width: 40px"></div></td>');
+                var td = $('<td style="width: 100px"><div class="n-toggle"></td>');
+                td.children('.n-toggle').nToggle(states);
+                row.append(td);
                 body.append(row);
             }
         }
@@ -111,7 +112,7 @@ $(function () {
                     row[idx2] = Number(valTd.innerText);
                 } else {
                     var fidx = idx2 - varNum;
-                    func[fidx] = $(valTd).find("input[type=text]").val();
+                    func[fidx] = $(valTd).find(".active").text();
                     if (func[fidx] !== '*')
                         func[fidx] = Number(func[fidx]);
                 }
@@ -586,30 +587,6 @@ $(function () {
     }
 
 });
-
-var lastChecked = false;
-var lastChBox;
-function clickCheckbox(chBox, id) {
-    var input = $('#' + id);
-    if (chBox.checked) {
-        input.val('1');
-        if (lastChBox !== chBox) {
-            lastChecked = true;
-            lastChBox = chBox;
-        }
-    } else {
-        if (lastChecked) {
-            lastChecked = false;
-            input.val('*');
-        } else {
-            input.val('0');
-        }
-    }
-    if (lastChBox !== chBox) {
-        lastChBox = undefined;
-        lastChecked = false;
-    }
-}
 
 function showImplicTable() {
     var modal = $('<div>').addClass('modal fade');

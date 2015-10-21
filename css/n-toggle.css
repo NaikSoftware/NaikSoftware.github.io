@@ -1,21 +1,24 @@
-body {
-	width: 100%;
-	height: 100%;
+.n-toggle {
+    width: 100%;
+    border: #EEEEEE solid;
+    background-color: #EEEEEE;
+    border-radius: 2em;
 }
 
-html {
-	width: 100%;
-	height: 100%;
+.n-toggle > .toggle-elem {
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
 }
 
-.display {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+.n-toggle > .toggle-elem.active {
+    background-color: #CCCCCC;
 }
 
-.toggle {
-	text-align: center;
-	width: 100%;
+.n-toggle > .toggle-elem:first-child {
+    border-radius: 2em 0 0 2em;
+}
+
+.n-toggle > .toggle-elem:last-child {
+    border-radius: 0 2em 2em 0;
 }

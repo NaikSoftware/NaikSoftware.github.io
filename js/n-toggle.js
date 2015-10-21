@@ -1,32 +1,37 @@
 /*
-N-Toggle project
-This is a part of NaikSoftware.github.io
+ N-Toggle project
+ This is a part of NaikSoftware.github.io
+ 
+ @author Naik
+ */
+(function ($) {
 
-@author Naik
-*/
-(function($) {
+    /**
+     * @param states array with toggle states in format {text: string, active: boolean}
+     */
+    $.fn.nToggle = function (states) {
+        var toggle = this;
+        var count = states.length;
+        var stateWidth = 100 / count;
+        for (var i = 0; i < count; i++) {
+            toggle.append(make(states[i], stateWidth));
+        }
+        
+        return function() {
+            return toggle.children('.active').text();
+        };
+    };
 
-	/**
-	* @param states array with toggle states
-	*/
-	$.fn.nToggle = function(states) {
-		var count = states.length;
-		var stateWidth = this.css('width') / count;
-		for(var i = 0; i < count; i++) {
-			this.append(make(states[i], stateWidth));
-		}
-	}
-	
-	function make(state, width) {
-		var elem = $('<div class="toggle-elem">');
-		elem.css('width', width);
-		elem.text(state.text);
-		if (state.active) elem.addClass('active-ntoggle');
-		elem.on('click', function() {
-			elem.parent().removeClass('active-toggle');
-			elem.addClass('active-ntoggle');
-		});
-		return elem;
-	}
-	
+    function make(state, width) {
+        var elem = $('<span class="toggle-elem">');
+        elem.width(width + '%');
+        elem.text(state.text);
+        if (state.active) elem.addClass('active');
+        elem.on('click', function () {
+            elem.parent().children().removeClass('active');
+            elem.addClass('active');
+        });
+        return elem;
+    }
+
 })(jQuery);
